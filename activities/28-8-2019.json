@@ -1,0 +1,18 @@
+{
+    "activities": [
+        {
+            "isBrowser": false,
+            "name": "Visual Studio Code",
+            "time_entries": [
+                {
+                    "days": 0,
+                    "end_time": "2019-08-28 16:33:58",
+                    "hours": 0,
+                    "minutes": 0,
+                    "seconds": 6,
+                    "start_time": "2019-08-28 16:33:52"
+                }
+            ]
+        }
+    ]
+}

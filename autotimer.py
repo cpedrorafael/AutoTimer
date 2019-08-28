@@ -33,22 +33,27 @@ except Exception:
     print('No json')
 
 
+def isBrowser(window):
+    if window == 'Google Chrome' or window == 'Brave' or window == 'Opera':
+        return True
+    return False
+
+
 try:
     while True:
-        previous_site = ""
 
         window_code = win32gui.GetForegroundWindow()
         window_text = win32gui.GetWindowText(window_code)
-        print('Window Text:{}'.format(window_text))
 
         window_text_array = window_text.split(' - ')
         new_window_name = window_text_array[-1]
+        program_name = window_text_array[-1]
 
-        if new_window_name == 'Google Chrome' or new_window_name == 'Brave' or new_window_name == 'Opera':
+        if isBrowser(program_name):
             new_window_name = window_text_array[-2]
 
         if active_window_name != new_window_name:
-            print(new_window_name)
+            print('\nCurrent: {}\n'.format(new_window_name))
             activity_name = active_window_name
 
             if not first_time:
@@ -63,7 +68,8 @@ try:
                         activity.time_entries.append(time_entry)
 
                 if not exists:
-                    activity = Activity(activity_name, [time_entry])
+                    activity = Activity(
+                        activity_name, isBrowserFlag, [time_entry])
                     activeList.activities.append(activity)
                 with open('{}\\activities\\{}-{}-{}.json'.format(os.getcwd(), datetime.datetime.now().day, datetime.datetime.now().month, datetime.datetime.now().year), 'w') as json_file:
                     json.dump(activeList.serialize(), json_file,
@@ -71,8 +77,10 @@ try:
                     start_time = datetime.datetime.now()
             first_time = False
             active_window_name = new_window_name
+            isBrowserFlag = isBrowser(program_name)
 
         time.sleep(10)
 except KeyboardInterrupt:
     with open('{}\\activities\\{}-{}-{}.json'.format(os.getcwd(), datetime.datetime.now().day, datetime.datetime.now().month, datetime.datetime.now().year), 'w') as json_file:
-        json.dump(activeList.serialize(), json_file, indent=4, sort_keys=True)
+        json.dump(activeList.serialize(), json_file,
+                  indent=4, sort_keys=True)
